@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+
+# imagens de teste locais (podem conter dados sensiveis) - nunca commitar
+*.jpg
+*.jpeg
+*.png
+*.dcm
