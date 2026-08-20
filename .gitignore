@@ -2,8 +2,10 @@
 __pycache__/
 *.pyc
 
-# imagens de teste locais (podem conter dados sensiveis) - nunca commitar
+# dados locais (imagens, datasets, pesos) - nunca commitar: sensivel e/ou grande demais pro git
+dados/
 *.jpg
 *.jpeg
 *.png
 *.dcm
+*.zip
