@@ -1,4 +1,4 @@
-# MedGemma RX: Análise de Radiografia de Tórax com IA
+# MedGemma Lung LoRA: Análise de Radiografia de Tórax com IA
 
 Projeto de estudo prático sobre fine-tuning de modelos de IA médica, usando o
 [MedGemma](https://huggingface.co/google/medgemma-4b-it) do Google (variante
