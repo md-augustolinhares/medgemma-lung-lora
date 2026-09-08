@@ -132,19 +132,6 @@ rótulo quase zero. A solução foi um limiar fixo e baixo, já que o fundo
 real é praticamente zero e até o pulmão, a parte mais escura do corpo, já
 fica bem acima disso.
 
-**VRAM e o travamento de 3 horas.** A primeira tentativa de treino com LoRA
-ficou presa por horas sem terminar. A causa raiz tinha duas partes. Uma: o
-pipeline carregava o modelo MedGemma completo, incluindo o language_model
-(2,28 bilhões de parâmetros, 10,8x o tamanho do vision_tower), mesmo sem
-usá-lo. Duas: isso deixava a VRAM da GPU no limite, e o Windows, nesse
-ponto, passa a usar memória compartilhada com a RAM (dezenas de vezes mais
-lenta) sem avisar. A correção foi descartar o language_model logo após
-carregar, e aplicar o LoRA só nas últimas camadas do encoder. O
-`gradient_checkpointing` (técnica que economiza VRAM recalculando ativações
-durante o backward em vez de guardá-las todas na memória), testado como
-alternativa, não é realmente implementado nessa versão do encoder do
-MedGemma apesar de declarar suporte.
-
 ## Limitações importantes
 
 Não é dispositivo médico. O MedGemma é distribuído pelo Google como
