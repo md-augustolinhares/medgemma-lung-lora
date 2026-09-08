@@ -2,9 +2,8 @@
 
 Projeto de estudo prático sobre fine-tuning de modelos de IA médica, usando o
 [MedGemma](https://huggingface.co/google/medgemma-4b-it) do Google (variante
-médica do Gemma 3) para analisar radiografias de tórax: geração de laudo por
-checklist e, principalmente, um experimento completo de fine-tuning com LoRA
-para prever a proporção pulmão/tórax visível na imagem.
+médica do Gemma 3) para prever a proporção pulmão/tórax visível numa
+radiografia de tórax, com fine-tuning via LoRA.
 
 O objetivo aqui foi aprender o processo de fine-tuning de modelos de IA
 aplicados à medicina. Não é uma ferramenta clínica pronta. Os resultados
@@ -15,17 +14,9 @@ correções reais que aconteceram no caminho.
 
 ## O que tem aqui
 
-Duas frentes. A primeira é um laudo por checklist (`src/analisar_rx.py` +
-`src/app_web.py`), que usa o MedGemma direto, em modo texto, para gerar uma
-leitura estruturada da radiografia: 14 itens, cobrindo qualidade técnica,
-mediastino (compartimento central do tórax, entre os pulmões), campos
-pulmonares, seios costofrênicos (o ângulo entre o diafragma e a parede
-torácica, onde líquido pleural costuma se acumular primeiro), e assim por
-diante.
-
-A segunda, e o núcleo do projeto, é a previsão de área pulmonar: um pipeline
-completo de fine-tuning que ensina o modelo a prever que fração do tórax do
-paciente é ocupada pelos pulmões, a partir só da imagem.
+O núcleo do projeto é a previsão de área pulmonar: um pipeline completo de
+fine-tuning que ensina o modelo a prever que fração do tórax do paciente é
+ocupada pelos pulmões, a partir só da imagem.
 
 ## Como funciona a previsão de área pulmonar
 
@@ -156,15 +147,13 @@ modelo herda esse viés.
 ## Estrutura do projeto
 
 ```
-Medgemma-RX/
+medgemma-lung-lora/
 ├── requirements.txt
 ├── checkpoints/
 │   ├── cabecote.pt              cabecote linear (metrica antiga, pulmao/imagem)
 │   ├── cabecote_lora.pt         cabecote treinado junto com o LoRA
 │   └── lora_vision/             adapter LoRA (vision_tower)
 └── src/
-    ├── analisar_rx.py           laudo por checklist (MedGemma em modo texto)
-    ├── app_web.py                interface web do laudo (Gradio)
     ├── preparar_dados.py         calcula o rotulo pulmao/torax a partir das mascaras
     ├── verificar_dados.py        grade visual de conferencia dos rotulos
     ├── extrair_embeddings.py     extrai embeddings congelados do vision_tower
@@ -191,9 +180,6 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cu132
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 .venv\Scripts\hf.exe auth login   # cole seu token do Hugging Face
-
-# laudo por checklist
-.venv\Scripts\python.exe src\app_web.py
 
 # previsao de area pulmonar (precisa preparar o dado antes, ver preparar_dados.py)
 .venv\Scripts\python.exe src\app_area.py
