@@ -9,3 +9,6 @@ dados/
 *.png
 *.dcm
 *.zip
+
+# excecao: imagens do README (nao sao dado de paciente/dataset)
+!docs/*.png

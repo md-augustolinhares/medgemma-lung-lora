@@ -1,6 +1,6 @@
 """
-Interface web para prever a fracao de area pulmonar visivel numa radiografia
-de torax, usando o cabecote treinado sobre embeddings congelados do MedGemma.
+Interface web para prever a fracao pulmao/torax numa radiografia de torax,
+usando o vision_tower do MedGemma com o adapter LoRA treinado.
 
 Uso:
     python app_area.py
@@ -10,12 +10,12 @@ Abre em http://127.0.0.1:7861
 
 import gradio as gr
 
-from prever_area import carregar_tudo, prever
+from prever_area_lora import carregar_tudo, prever
 
 AVISO = (
-    "⚠️ Ferramenta de estudo/pesquisa. O numero e uma medida RELATIVA "
-    "(% da imagem ocupada pelo pulmao), nao uma area fisica em cm² — "
-    "as imagens de treino nao tem calibracao de escala real."
+    "Ferramenta de estudo/pesquisa. O numero e a fracao do TORAX do "
+    "paciente ocupada pelos pulmoes, uma medida relativa (nao e area "
+    "fisica em cm2: as imagens de treino nao tem calibracao de escala real)."
 )
 
 
@@ -24,13 +24,13 @@ def prever_upload(caminho_imagem: str | None) -> str:
         return "Envie uma imagem de radiografia de torax primeiro."
     try:
         fracao = prever(caminho_imagem)
-        return f"{fracao * 100:.1f}% da imagem ocupada pelos pulmoes"
+        return f"{fracao * 100:.1f}% do torax ocupado pelos pulmoes"
     except Exception as erro:
         return f"Erro ao processar a imagem: {erro}"
 
 
-with gr.Blocks(title="Area Pulmonar (MedGemma + cabecote linear)") as demo:
-    gr.Markdown("# Previsao de area pulmonar (relativa)")
+with gr.Blocks(title="Area Pulmonar (MedGemma + LoRA)") as demo:
+    gr.Markdown("# Previsao de area pulmonar (pulmao / torax)")
     gr.Markdown(AVISO)
 
     with gr.Row():
